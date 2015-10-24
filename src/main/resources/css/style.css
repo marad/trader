@@ -1,0 +1,14 @@
+#container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.fleet {
+    padding: 5px;
+    margin: 5px 1px;
+}
+
+.ship {
+    position: relative;
+    left: 98%;
+}

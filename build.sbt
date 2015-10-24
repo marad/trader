@@ -8,14 +8,16 @@ name := "Example"
 
 version := "0.1-SNAPSHOT"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
-  "org.scala-js" %%% "scalajs-dom" % "0.8.0",
-  "com.lihaoyi" %%% "scalatags" % "0.5.2"
+  "org.scala-js" %%% "scalajs-dom" % "0.8.1",
+  "com.lihaoyi" %%% "scalatags" % "0.5.2",
+  "io.github.widok" %%% "widok" % "0.2.2"
 )
 
 bootSnippet := "example.ScalaJSExample().main(document.getElementById('canvas'));"
 
 updateBrowsers <<= updateBrowsers.triggeredBy(fastOptJS in Compile)
 
+persistLauncher := true

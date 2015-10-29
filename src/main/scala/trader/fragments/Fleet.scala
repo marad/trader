@@ -1,4 +1,4 @@
-package example.fragments
+package trader.fragments
 
 import scalatags.Text.all._
 

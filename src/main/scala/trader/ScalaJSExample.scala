@@ -1,6 +1,6 @@
-package example
+package trader
 
-import example.fragments.Fleet
+import trader.fragments.Fleet
 
 import scala.scalajs.js.annotation.JSExport
 import org.scalajs.dom

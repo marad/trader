@@ -1,4 +1,4 @@
-package example.pages
+package trader.pages
 
 import org.widok._
 import org.widok.html._

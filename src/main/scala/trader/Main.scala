@@ -1,4 +1,4 @@
-package example
+package trader
 
 import org.widok._
 import org.widok.html._
@@ -27,8 +27,10 @@ import org.scalajs.dom
 //}
 
 object Routes {
-  val city = Route("/:name", pages.City)
-  val shipyard = Route("/:city/shipyard", pages.Shipyard)
+  val city = Route("/city/:name", pages.CityPage)
+  val shipyard = Route("/city/:city/shipyard", pages.Shipyard)
+
+  val notFound = Route("/404", pages.NotFound)
 
   val routes = Set(city, shipyard)
 }

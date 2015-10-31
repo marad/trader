@@ -4,7 +4,8 @@ import org.widok._
 import org.widok.bindings.Bootstrap._
 import org.widok.html._
 import trader.{Game, Routes}
-import trader.fragments.{CityList, ResourcesView}
+import trader.Utils.OptionNavigationExtensions
+import trader.fragments.{ActionList, CityList, ResourcesView}
 import trader.state.City
 
 case class CityPage() extends Page {
@@ -25,15 +26,8 @@ case class CityPage() extends Page {
     cityList
   )
   val fleetsView = div("floty")
-  val buildingsView = Grid.Row(
-    possibleActions.map(action => {
-      Grid.Column(
-        Button(action._1)
-          .onClick(_ => action._2())
-          .width(Length.Percentage(1))
-      ).column(Size.Medium, 4)
-    }):_*
-  )
+
+  val buildingsView = ActionList(possibleActions, columns = 3)
 
   override def view(): View = div(
     Grid.Row(

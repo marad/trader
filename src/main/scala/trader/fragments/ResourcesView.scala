@@ -1,6 +1,6 @@
 package trader.fragments
 
-import trader.state.Resources
+import trader.core.state.Resources
 import org.widok._
 import org.widok.html._
 

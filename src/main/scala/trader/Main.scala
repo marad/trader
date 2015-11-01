@@ -4,6 +4,7 @@ import org.widok._
 import org.widok.html._
 import org.widok.bindings.Bootstrap._
 import org.scalajs.dom
+import view.pages._
 
 //object Main extends PageApplication {
 //  val name = Var("Mori")
@@ -27,10 +28,10 @@ import org.scalajs.dom
 //}
 
 object Routes {
-  val city = Route("/city/:name", pages.CityPage)
-  val shipyard = Route("/city/:city/shipyard", pages.Shipyard)
+  val city = Route("/city/:name", CityPage)
+  val shipyard = Route("/city/:city/shipyard", Shipyard)
 
-  val notFound = Route("/404", pages.NotFound)
+  val notFound = Route("/404", NotFound)
 
   val routes = Set(city, shipyard)
 }

@@ -1,6 +1,6 @@
-package trader
+package trader.core
 
-import trader.state.{City, State}
+import trader.core.state.{City, State}
 
 object Game {
   var state: State = null

@@ -3,7 +3,8 @@ package trader.fragments
 import org.scalajs.dom.html.Element
 import org.widok._
 import org.widok.bindings.Bootstrap._
-import trader.{Routes, Game}
+import trader.Routes
+import trader.core.Game
 
 case class CityList() extends Widget[CityList] {
   val cityList = Game.state.cities.values

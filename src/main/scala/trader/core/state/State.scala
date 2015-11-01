@@ -1,4 +1,4 @@
-package trader.state
+package trader.core.state
 
 import scala.collection.mutable
 import org.widok.Var

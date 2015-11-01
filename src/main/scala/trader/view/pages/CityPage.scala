@@ -1,12 +1,13 @@
-package trader.pages
+package trader.view.pages
 
 import org.widok._
 import org.widok.bindings.Bootstrap._
 import org.widok.html._
-import trader.{Game, Routes}
-import trader.Utils.OptionNavigationExtensions
+import trader.Routes
+import Utils.OptionNavigationExtensions
+import trader.core.Game
 import trader.fragments.{ActionList, CityList, ResourcesView}
-import trader.state.City
+import trader.core.state.City
 
 case class CityPage() extends Page {
   val city = Var(City.empty)

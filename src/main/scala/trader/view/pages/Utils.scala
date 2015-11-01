@@ -1,4 +1,4 @@
-package trader
+package trader.view.pages
 
 import org.widok.Route
 

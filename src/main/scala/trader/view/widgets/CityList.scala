@@ -1,4 +1,4 @@
-package trader.fragments
+package trader.view.widgets
 
 import org.scalajs.dom.html.Element
 import org.widok._

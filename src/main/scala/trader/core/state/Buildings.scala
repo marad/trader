@@ -1,63 +1,107 @@
 package trader.core.state
 
-import scala.concurrent.duration._
+import org.widok.{ReadChannel, Var}
+import trader.core.Game
 
-//trait Building {
-//  def level: Int
-//}
-//
-//trait Factory[T >: Resource] {
-//  def produce(): T
-//}
-//
-//trait LinearFactory[T >: Resource] extends Building {
-//  def produce(): T = level.toFloat
-//}
-//
-//case class LumberMill(level: Int) extends Factory[Wood] with LinearFactory[Wood]
-//
-//case class ClayPit(level: Int) extends Factory[Clay] with LinearFactory[Clay]
-//
-//case class BrickFactory(level: Int) extends Factory[Bricks] with LinearFactory[Bricks]
-//
-//case class Farm(level: Int) extends Factory[Grain] with LinearFactory[Grain]
+case class Ingredient(amount: Int, resource: Var[Float])
 
-trait Producer[Material >: Resource] {
-  def productionTime: Duration
-  def produce(resources: Resources): (Resources, Material)
+case class Recipe(consumes: Seq[Ingredient], produces: Ingredient)
+
+trait RecipeDSL {
+  val resources: Resources
+
+  val wood = resources.wood
+  val bricks = resources.bricks
+  val clay = resources.clay
+  val wheat = resources.wheat
+  val salt = resources.salt
+  val rawMeat = resources.rawMeat
+  val cotton = resources.cotton
+  val bread = resources.bread
+  val meat = resources.meat
+  val clothes = resources.clothes
+
+  def generate(amount: Int, resource: Var[Float]): Recipe =
+    Recipe(Seq(), Ingredient(amount, resource))
+
+  def use(amount: Int, resource: Var[Float]): Use = Use(Seq(Ingredient(amount, resource)))
+
+  protected case class Use(ingredients: Seq[Ingredient]) {
+    def and(amount: Int, resource: Var[Float]): Use = Use(ingredients :+ Ingredient(amount, resource))
+
+    def toCreate(amount: Int, resource: Var[Float]): Recipe =
+      Recipe(ingredients, Ingredient(amount, resource))
+  }
 }
 
-trait ResourceGenerator {
-  def consumeResources(resources: Resources) = resources
+sealed trait JobStatus
+case object Working extends JobStatus
+case object Suspended extends JobStatus
+case object NotEnoughResources extends JobStatus
+
+trait Building extends RecipeDSL {
+  val resources: Resources
+  def recipe: Recipe
+  def name: String
+
+  private var clockSubscription: ReadChannel[Unit] = null
+  val status = Var[JobStatus](Working)
+  val working = status.map(_ == Working)
+
+  status.attach {
+    case Working => clockSubscription = Game.clock.attach(_ => work())
+    case Suspended => clockSubscription.dispose()
+    case _ =>
+  }
+
+  def work(): Unit = {
+    if (hasResources) {
+      consumeResources()
+      produceResources()
+    }
+  }
+
+  private def hasResources: Boolean =
+    recipe.consumes.forall(i => i.resource.get >= i.amount)
+
+  private def consumeResources(): Unit =
+    recipe.consumes.foreach(i => i.resource.update(_ - i.amount))
+
+  private def produceResources(): Unit =
+    recipe.produces.resource.update(_ + recipe.produces.amount)
 }
 
-abstract class Building[Material >: Resource with AnyVal](materialCreator: Float => Material) extends Producer[Material] {
-  def consumeResources(resources: Resources): Resources
-
-  def produce(resources: Resources): (Resources, Material) =
-    (consumeResources(resources), materialCreator(1))
+case class LumberMill(resources: Resources) extends Building {
+  val name = "Lumber Mill"
+  val recipe = generate(1, wood)
 }
 
-object LumberMill extends Building[Wood](Wood) with ResourceGenerator {
-  val productionTime = 1 second
+case class ClayPit(resources: Resources) extends Building {
+  val name = "Clay Pit"
+  val recipe = generate(1, clay)
 }
 
-object ClayPit extends Building[Clay](Clay) with ResourceGenerator {
-  val productionTime = 1 second
+case class WheatFarm(resources: Resources) extends Building {
+  val name = "Wheat Farm"
+  val recipe = generate(1, wheat)
 }
 
-object WheatFarm extends Building[Wheat](Wheat) with ResourceGenerator {
-  val productionTime = 1 second
+case class SaltMine(resources: Resources) extends Building {
+  val name = "Salt Mine"
+  val recipe = generate(1, salt)
 }
 
-object SaltMine extends Building[Salt](Salt) with ResourceGenerator {
-  val productionTime = 1 second
+case class PigFarm(resources: Resources) extends Building {
+  val name = "Pig Farm"
+  val recipe = generate(1, rawMeat)
 }
 
-object PigFarm extends Building[RawMeat](RawMeat) with ResourceGenerator {
-  val productionTime = 1 second
+case class CottonFarm(resources: Resources) extends Building {
+  val name = "Cotton Farm"
+  val recipe = generate(1, cotton)
 }
 
-object CottonFarm extends Building[Cotton](Cotton) with ResourceGenerator {
-  val productionTime = 1 second
+case class Brickyard(resources: Resources) extends Building {
+  val name = "Brickyard"
+  val recipe = use(2, clay) toCreate (1, bricks)
 }

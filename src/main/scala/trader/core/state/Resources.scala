@@ -1,40 +1,17 @@
 package trader.core.state
 
-trait Resource
-
-case class Wood(amount: Float) extends AnyVal
-
-case class Clay(amount: Float) extends AnyVal
-
-case class Wheat(amount: Float) extends AnyVal
-
-case class Salt(amount: Float) extends AnyVal
-
-case class RawMeat(amount: Float) extends AnyVal
-
-case class Cotton(amount: Float) extends AnyVal
-
-case class Bricks(amount: Float) extends AnyVal
-
-case class Bread(amount: Float) extends AnyVal
-
-case class Meat(amount: Float) extends AnyVal
-
-case class Clothes(amount: Float) extends AnyVal
+import org.widok.Var
 
 case class Resources(
-                      wood: Wood = Wood(0),
-                      bricks: Bricks = Bricks(0)
-                      //                      clay: Clay = 0,
-                      //                      grain: Grain = 0,
-                      //                      wool: Wool = 0,
-                      //                      ironOre: IronOre = 0,
-                      //                      salt: Salt = 0,
-                      //                      tools: Tools = 0,
-                      //                      beer: Beer = 0,
-                      //                      fish: Fish = 0,
-                      //                      milk: Milk = 0,
-                      //                      cheese: Cheese = 0,
-                      //                      meat: Meat = 0
+                      wood    : Var[Float] = Var(0),
+                      bricks  : Var[Float] = Var(0),
+                      clay    : Var[Float] = Var(0),
+                      wheat   : Var[Float] = Var(0),
+                      salt    : Var[Float] = Var(0),
+                      rawMeat : Var[Float] = Var(0),
+                      cotton  : Var[Float] = Var(0),
+                      bread   : Var[Float] = Var(0),
+                      meat    : Var[Float] = Var(0),
+                      clothes : Var[Float] = Var(0)
                       )
 
